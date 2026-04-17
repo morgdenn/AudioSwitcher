@@ -1,0 +1,12 @@
+# Build artifacts
+build/
+dist/
+*.spec.bak
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# IDE / local config
+.claude/settings.local.json
