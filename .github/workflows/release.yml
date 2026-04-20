@@ -53,11 +53,22 @@ jobs:
             --upx-dir="$env:UPX_DIR" `
             audio_switcher.py
 
+      - name: Bump patch version
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          $latest = gh release list --limit 1 --json tagName --jq '.[0].tagName' 2>$null
+          if ($latest -match '^v(\d+)\.(\d+)\.(\d+)$') {
+            $tag = "v$($matches[1]).$($matches[2]).$([int]$matches[3] + 1)"
+          } else {
+            $tag = "v1.0.0"
+          }
+          echo "TAG=$tag" >> $env:GITHUB_ENV
+
       - name: Create release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          $tag = "v$(Get-Date -Format 'yyyy.MM.dd')-$('${{ github.sha }}'.Substring(0,7))"
-          gh release create $tag dist/AudioSwitcher.exe `
-            --title "AudioSwitcher $tag" `
+          gh release create $env:TAG dist/AudioSwitcher.exe install_startup.bat `
+            --title "AudioSwitcher $env:TAG" `
             --notes "Built from commit ${{ github.sha }}"
