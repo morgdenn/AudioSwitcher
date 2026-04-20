@@ -21,6 +21,12 @@ jobs:
       - name: Install dependencies
         run: pip install pystray Pillow comtypes pyinstaller
 
+      - name: Download UPX
+        run: |
+          Invoke-WebRequest -Uri "https://github.com/upx/upx/releases/download/v4.2.4/upx-4.2.4-win64.zip" -OutFile upx.zip
+          Expand-Archive upx.zip -DestinationPath upx_dir
+          echo "UPX_DIR=$((Get-Item upx_dir/upx-*).FullName)" >> $env:GITHUB_ENV
+
       - name: Build exe
         run: |
           python -m PyInstaller `
@@ -30,6 +36,21 @@ jobs:
             --hidden-import=comtypes `
             --hidden-import=comtypes.client `
             --hidden-import=pystray._win32 `
+            --exclude-module=tkinter `
+            --exclude-module=unittest `
+            --exclude-module=email `
+            --exclude-module=html `
+            --exclude-module=http `
+            --exclude-module=urllib `
+            --exclude-module=xml `
+            --exclude-module=PIL.BmpImagePlugin `
+            --exclude-module=PIL.GifImagePlugin `
+            --exclude-module=PIL.JpegImagePlugin `
+            --exclude-module=PIL.Jpeg2KImagePlugin `
+            --exclude-module=PIL.PngImagePlugin `
+            --exclude-module=PIL.TiffImagePlugin `
+            --exclude-module=PIL.WebPImagePlugin `
+            --upx-dir="$env:UPX_DIR" `
             audio_switcher.py
 
       - name: Create release
