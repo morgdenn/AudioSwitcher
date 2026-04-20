@@ -55,6 +55,12 @@ PKEY_Device_FriendlyName = PROPERTYKEY()
 PKEY_Device_FriendlyName.fmtid = GUID("{a45c254e-df1c-4efd-8020-67d146a850e0}")
 PKEY_Device_FriendlyName.pid   = 14
 
+PKEY_DeviceInterface_FriendlyName = PROPERTYKEY()
+PKEY_DeviceInterface_FriendlyName.fmtid = GUID("{026e516e-b814-414b-83cd-856d6fef4822}")
+PKEY_DeviceInterface_FriendlyName.pid   = 2
+
+VT_LPWSTR = 31
+
 
 # ─── COM interfaces ───────────────────────────────────────────────────────────
 
@@ -175,11 +181,16 @@ def get_devices_friendly():
 def _get_friendly_name(device):
     try:
         store = device.OpenPropertyStore(STGM_READ)
-        pv    = PROPVARIANT()
-        store.GetValue(byref(PKEY_Device_FriendlyName), byref(pv))
-        return pv._u.pwszVal
+        for pkey in (PKEY_Device_FriendlyName, PKEY_DeviceInterface_FriendlyName):
+            try:
+                pv = store.GetValue(byref(pkey))
+                if pv.vt == VT_LPWSTR and pv._u.pwszVal:
+                    return pv._u.pwszVal
+            except Exception:
+                continue
     except Exception:
-        return None
+        pass
+    return None
 
 
 def get_default_device_id():
