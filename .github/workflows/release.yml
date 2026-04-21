@@ -46,7 +46,6 @@ jobs:
             --exclude-module=PIL.GifImagePlugin `
             --exclude-module=PIL.JpegImagePlugin `
             --exclude-module=PIL.Jpeg2KImagePlugin `
-            --exclude-module=PIL.PngImagePlugin `
             --exclude-module=PIL.TiffImagePlugin `
             --exclude-module=PIL.WebPImagePlugin `
             --upx-dir="$env:UPX_DIR" `
