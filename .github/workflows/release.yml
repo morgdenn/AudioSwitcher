@@ -36,18 +36,6 @@ jobs:
             --hidden-import=comtypes `
             --hidden-import=comtypes.client `
             --hidden-import=pystray._win32 `
-            --exclude-module=tkinter `
-            --exclude-module=unittest `
-            --exclude-module=email `
-            --exclude-module=html `
-            --exclude-module=http `
-            --exclude-module=xml `
-            --exclude-module=PIL.BmpImagePlugin `
-            --exclude-module=PIL.GifImagePlugin `
-            --exclude-module=PIL.JpegImagePlugin `
-            --exclude-module=PIL.Jpeg2KImagePlugin `
-            --exclude-module=PIL.TiffImagePlugin `
-            --exclude-module=PIL.WebPImagePlugin `
             --upx-dir="$env:UPX_DIR" `
             audio_switcher.py
 
